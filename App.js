@@ -186,8 +186,8 @@ function ResultScreen({route, navigation }){
 
 function ManipulateScreen({route, navigation }){
   const {val,redDice,blackDice} = route.params;
-  const [va,SetVa] = useState(0);
-  const [vb,SetVb] = useState(0);
+  const [va,SetVa] = useState(redDice);
+  const [vb,SetVb] = useState(blackDice);
   const choiceOdd = "플레이어는 홀수를 골랐습니다.";
   const choiceEven = "플레이어는 짝수를 골랐습니다.";
   return(
@@ -203,12 +203,14 @@ function ManipulateScreen({route, navigation }){
       <View>
         <Text>RedDice의 값 바꾸기</Text>
         <RNPickerSelect
-          name = "changeRD"
+          placeholder={{
+            label: 'No Change',
+            value: ''
+          }}
           onValueChange={(va) => {
             SetVa(va);
           }}
           items ={[
-            { label: 'No Change', value: redDice},
             { label: '1', value: 1},
             { label: '2', value: 2},
             { label: '3', value: 3},
@@ -219,12 +221,14 @@ function ManipulateScreen({route, navigation }){
         />
         <Text>BlackDice의 값 바꾸기</Text>
         <RNPickerSelect
-          name = "changeBD"
+          placeholder={{
+            label: 'No Change',
+            value: ''
+          }}
           onValueChange={(vb) => {
             SetVb(vb);
           }}
           items ={[
-            { label: 'No Change', value: blackDice},
             { label: '1', value: 1},
             { label: '2', value: 2},
             { label: '3', value: 3},
