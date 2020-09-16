@@ -8,12 +8,20 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-navigation/native": "^5.7.3",
+    "@react-navigation/stack": "^5.9.0",
     "expo": "~38.0.8",
     "expo-status-bar": "^1.0.2",
+    "prop-types": "^15.7.2",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
-    "react-native-web": "~0.11.7"
+    "react-native-gesture-handler": "^1.8.0",
+    "react-native-simple-radio-button": "^2.7.4",
+    "react-native-web": "~0.11.7",
+    "react-navigation": "^4.4.0",
+    "react-navigation-stack": "^2.8.2",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
