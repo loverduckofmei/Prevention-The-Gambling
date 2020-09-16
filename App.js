@@ -60,6 +60,7 @@ export default function App(){
         <Stack.Screen name="Result" component={ResultScreen}/>
         <Stack.Screen name="TrueWin" component={TrueWinnerScreen}/>
         <Stack.Screen name="Manipulate" component={ManipulateScreen}/>
+        <Stack.Screen name="StopGamble" component={StopGambleScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
    );
@@ -158,34 +159,6 @@ function DiceScreen({navigation: { navigate }}){
   );
 };
 
-function ResultScreen({route, navigation }){
-  
-  const {val,va,vb} = route.params;
-  const add = Number(va) + Number(vb);
-  const oddEven = (Number(va) + Number(vb)) % 2 ;
-
-  const choiceOdd = "당신은 홀수를 골랐습니다.";
-  const choiceEven = "당신은 짝수를 골랐습니다.";
-  const odd = "주사위의 결과는 홀수 입니다.";
-  const even = "주사위의 결과는 짝수 입니다.";
-  const win = "당신이 이겼습니다.";
-  const lose = "당신이 졌습니다.";
-  return (
-    <View style={styles.container}>
-      <Text>[결과 화면]</Text>
-      <View style={styles.row}>
-         <Image style={styles.img} source={RedDice[va]} />
-         <Image style={styles.img} source={BlackDice[vb]} />
-      </View>
-      <Text>주사위의 합은 {JSON.stringify(add)}입니다.</Text>
-      <Text>{JSON.stringify(val) != 0 ? choiceEven : choiceOdd}</Text>
-      <Text>{JSON.stringify(oddEven) == 0? even : odd}</Text>
-      <Text>{JSON.stringify(val) != JSON.stringify(oddEven) ? win : lose} </Text>
-      <Button title="Play The Game Again" onPress={() => navigation.navigate('DiceGame')}/>
-    </View>
-  )
-};
-
 function ManipulateScreen({route, navigation }){
   const {val,redDice,blackDice} = route.params;
   const [va,SetVa] = useState(redDice);
@@ -258,6 +231,45 @@ function ManipulateScreen({route, navigation }){
   );
 };
 
+function ResultScreen({route, navigation }){
+  
+  const {val,va,vb} = route.params;
+  const add = Number(va) + Number(vb);
+  const oddEven = (Number(va) + Number(vb)) % 2 ;
+
+  const choiceOdd = "당신은 홀수를 골랐습니다.";
+  const choiceEven = "당신은 짝수를 골랐습니다.";
+  const odd = "주사위의 결과는 홀수 입니다.";
+  const even = "주사위의 결과는 짝수 입니다.";
+  const win = "당신이 이겼습니다.";
+  const lose = "당신이 졌습니다.";
+  return (
+    <View style={styles.container}>
+      <Text>[결과 화면]</Text>
+      <View style={styles.row}>
+         <Image style={styles.img} source={RedDice[va]} />
+         <Image style={styles.img} source={BlackDice[vb]} />
+      </View>
+      <Text>주사위의 합은 {JSON.stringify(add)}입니다.</Text>
+      <Text>{JSON.stringify(val) != 0 ? choiceEven : choiceOdd}</Text>
+      <Text>{JSON.stringify(oddEven) == 0? even : odd}</Text>
+      <Text>{JSON.stringify(val) != JSON.stringify(oddEven) ? win : lose} </Text>
+      <Button title="Play This Game Again" onPress={() => navigation.navigate('DiceGame')}/>
+      <Button title="Quit This Game" onPress={() => navigation.navigate('StopGamble')}/>
+    </View>
+  )
+};
+
+function StopGambleScreen({navigation}){
+  return(
+    <View style={styles.container}>
+      <Text>Gamble Always Be Unfair To You,</Text>
+      <Text>You Must Be Realize Seriousness And Addiction Of The Gamble,</Text>
+      <Text> And Stop Do That!!!</Text>
+      <Button title="Go TO Home" onPress={() => navigation.navigate('HomePage') }/>
+    </View>
+  )
+}
 function TrueWinnerScreen({navigation}){
   return(
     <View style={styles.container}>
