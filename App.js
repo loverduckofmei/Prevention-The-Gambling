@@ -1,11 +1,14 @@
 import React, { Component, useState } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button, TextInput } from "react-native";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from "react-native-simple-radio-button"; 
-// import MainPage from "./MainPage";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import RNPickerSelect from 'react-native-picker-select';
 
+// ※ git push 되지 않을때 
+// 1. git add . 
+// 2. git commit -m "msg";
+// 3. git push origin master; 
 
 //function HomeScreen({ navigation: { navigate } }) {
 //   return (
@@ -161,7 +164,6 @@ function ResultScreen({route, navigation }){
   const add = Number(va) + Number(vb);
   const oddEven = (Number(va) + Number(vb)) % 2 ;
 
-  
   const choiceOdd = "당신은 홀수를 골랐습니다.";
   const choiceEven = "당신은 짝수를 골랐습니다.";
   const odd = "주사위의 결과는 홀수 입니다.";
@@ -255,7 +257,6 @@ function ManipulateScreen({route, navigation }){
     </View>
   );
 };
-
 
 function TrueWinnerScreen({navigation}){
   return(
