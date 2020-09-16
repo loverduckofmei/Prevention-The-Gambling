@@ -1,9 +1,10 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button, TextInput } from "react-native";
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from "react-native-simple-radio-button"; 
 // import MainPage from "./MainPage";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import RNPickerSelect from 'react-native-picker-select';
 
 
 //function HomeScreen({ navigation: { navigate } }) {
@@ -46,6 +47,42 @@ import { createStackNavigator } from '@react-navigation/stack';
 //   );
 // }
 
+const Stack = createStackNavigator();
+export default function App(){
+   return(
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="HomePage" component={HomeScreen}/>
+        <Stack.Screen name="DiceGame" component={DiceScreen}/>
+        <Stack.Screen name="Result" component={ResultScreen}/>
+        <Stack.Screen name="TrueWin" component={TrueWinnerScreen}/>
+        <Stack.Screen name="Manipulate" component={ManipulateScreen}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+   );
+ }
+
+function HomeScreen({ navigation: { navigate } }) {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>The Gambling Prevention App</Text>
+      <View style={{flexDirection: 'row', margin: 20}}>
+       <Button
+         onPress={() =>
+           navigate('DiceGame')
+         }
+         title="Play The Roll The Dice"
+       />
+       <Button
+         onPress={() =>
+           navigate('TrueWin')
+         }
+         title="I Won't Play Gambling"
+       />
+      </View>
+    </View>
+  );
+}
 
 const BlackDice = {
   1: require("./img/b1.png"),
@@ -79,7 +116,7 @@ function DiceScreen({navigation: { navigate }}){
     const blackDice = Math.floor((Math.random()) * 6 +1); // 1~6 random
     setRedDice(redDice);
     setBlackDice(blackDice);
-    navigate('Result',{
+    navigate('Manipulate',{
       add : add,
       val : value,
       oddEven : oddEven,
@@ -120,14 +157,14 @@ function DiceScreen({navigation: { navigate }}){
 
 function ResultScreen({route, navigation }){
   
-  const {val,redDice,blackDice} = route.params;
-  const add = Number(redDice) + Number(blackDice);
-  const oddEven = (Number(redDice) + Number(blackDice)) % 2 ;
+  const {val,va,vb} = route.params;
+  const add = Number(va) + Number(vb);
+  const oddEven = (Number(va) + Number(vb)) % 2 ;
 
   
   const choiceOdd = "당신은 홀수를 골랐습니다.";
-  const odd = "주사위의 결과는 홀수 입니다.";
   const choiceEven = "당신은 짝수를 골랐습니다.";
+  const odd = "주사위의 결과는 홀수 입니다.";
   const even = "주사위의 결과는 짝수 입니다.";
   const win = "당신이 이겼습니다.";
   const lose = "당신이 졌습니다.";
@@ -135,39 +172,86 @@ function ResultScreen({route, navigation }){
     <View style={styles.container}>
       <Text>[결과 화면]</Text>
       <View style={styles.row}>
-         <Image style={styles.img} source={RedDice[redDice]} />
-         <Image style={styles.img} source={BlackDice[blackDice]} />
+         <Image style={styles.img} source={RedDice[va]} />
+         <Image style={styles.img} source={BlackDice[vb]} />
       </View>
       <Text>주사위의 합은 {JSON.stringify(add)}입니다.</Text>
       <Text>{JSON.stringify(val) != 0 ? choiceEven : choiceOdd}</Text>
       <Text>{JSON.stringify(oddEven) == 0? even : odd}</Text>
       <Text>{JSON.stringify(val) != JSON.stringify(oddEven) ? win : lose} </Text>
-      <Button title="Play The Game Again" onPress={() => navigation.goBack()}/>
+      <Button title="Play The Game Again" onPress={() => navigation.navigate('DiceGame')}/>
     </View>
   )
 };
 
-function HomeScreen({ navigation: { navigate } }) {
-   return (
-     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-       <Text>This is the home screen of the app</Text>
-       <View style={{flexDirection: 'row', margin: 20}}>
-        <Button
-          onPress={() =>
-            navigate('DiceGame')
-          }
-          title="Play The Roll The Dice"
+function ManipulateScreen({route, navigation }){
+  const {val,redDice,blackDice} = route.params;
+  const [va,SetVa] = useState(0);
+  const [vb,SetVb] = useState(0);
+  const choiceOdd = "플레이어는 홀수를 골랐습니다.";
+  const choiceEven = "플레이어는 짝수를 골랐습니다.";
+  return(
+    <View style={styles.container}>
+      <Text>[운영자 화면]</Text>
+      <View style={styles.row}>
+         <Image style={styles.img} source={RedDice[redDice]} />
+         <Image style={styles.img} source={BlackDice[blackDice]} />
+      </View>
+      <Text>{JSON.stringify(val) != 0 ? choiceEven : choiceOdd}</Text>
+      <Text>RedDice의 값은 {JSON.stringify(redDice)}입니다.</Text>
+      <Text>BlackDice의 값은 {JSON.stringify(blackDice)}입니다.</Text>
+      <View>
+        <Text>RedDice의 값 바꾸기</Text>
+        <RNPickerSelect
+          name = "changeRD"
+          onValueChange={(va) => {
+            SetVa(va);
+          }}
+          items ={[
+            { label: 'No Change', value: redDice},
+            { label: '1', value: 1},
+            { label: '2', value: 2},
+            { label: '3', value: 3},
+            { label: '4', value: 4},
+            { label: '5', value: 5},
+            { label: '6', value: 6}
+          ]}
         />
-        <Button
-          onPress={() =>
-            navigate('TrueWin', { names: ['Brent', 'Satya', 'Michaś'] })
-          }
-          title="I Won't Play Gambling"
+        <Text>BlackDice의 값 바꾸기</Text>
+        <RNPickerSelect
+          name = "changeBD"
+          onValueChange={(vb) => {
+            SetVb(vb);
+          }}
+          items ={[
+            { label: 'No Change', value: blackDice},
+            { label: '1', value: 1},
+            { label: '2', value: 2},
+            { label: '3', value: 3},
+            { label: '4', value: 4},
+            { label: '5', value: 5},
+            { label: '6', value: 6}
+          ]}
         />
-       </View>
-     </View>
-   );
-}
+      </View>
+      <View>
+        <Button
+          title="Go To Result" 
+          onPress={() => {
+            navigation.navigate('Result',{
+              va : va,
+              vb : vb,
+              BlackDice : blackDice,
+              val : val
+            }) 
+          }}
+
+        />
+      </View>
+    </View>
+  );
+};
+
 
 function TrueWinnerScreen({navigation}){
   return(
@@ -178,31 +262,6 @@ function TrueWinnerScreen({navigation}){
     </View>
   );
 }
-// const Stack = createStackNavigator();
-// 
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator initialRouteName="Home">
-//         <Stack.Screen name="Home" component={HomeScreen} />
-//         <Stack.Screen name="Profile" component={ProfileScreen} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
-const Stack = createStackNavigator();
-export default function App(){
-   return(
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="HomePage" component={HomeScreen}/>
-        <Stack.Screen name="DiceGame" component={DiceScreen}/>
-        <Stack.Screen name="Result" component={ResultScreen}/>
-        <Stack.Screen name="TrueWin" component={TrueWinnerScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-   );
- }
 
 const styles = StyleSheet.create({
   container : {
